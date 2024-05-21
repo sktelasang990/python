@@ -1,0 +1,36 @@
+
+import glfw
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+
+def display():
+    glClearColor(0.0, 0.0, 0.0, 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    glLoadIdentity()
+    glFlush()
+
+def main():
+    
+    if not glfw.init():
+        return
+
+    
+    window = glfw.create_window(500, 500, "A basic OpenGL window", None, None)
+    if not window:
+        glfw.terminate()
+        return
+
+    
+    glfw.make_context_current(window)
+
+    
+    glfw.set_window_size_callback(window, display)
+    while not glfw.window_should_close(window):
+        display()
+        glfw.swap_buffers(window)
+        glfw.poll_events()
+
+    glfw.terminate()
+
+if __name__ == "__main__":
+    main()
