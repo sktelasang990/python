@@ -1,0 +1,58 @@
+Program 1: Develop a Django app that displays current date and time in server
+Step 1: Create a project with name program1
+ django-admin startproject program1
+Step2: Create an Application inside the project with name app1
+ py manage.py startapp app1
+Step3: Edit the views.py in Application ‘app1’
+
+views.py (app1)
+from django.shortcuts import render
+from django.http import HttpResponse
+from datetime import datetime
+def current_datetime(request):
+now=datetime.now()
+html=f"<html><body><h1>CurrentDateTime:</h1><p>{now}</p></h1></body></html>"
+return HttpResponse(html)
+
+
+Step 4: Add a new file named ‘urls.py’ in app1
+urls.py(app1 -> Application name)
+
+
+
+from django.http import HttpResponse
+from django.urls import path
+from . import views
+urlpatterns=[
+path('current_datetime/',views.current_datetime,name='current_datetime'),
+]
+
+
+
+
+Step 5: Edit the file ‘urls.py’ in project.
+urls.py(program1-> Projectname)
+
+
+from django.contrib import admin
+from django.urls import path,include
+urlpatterns = [
+path('admin/', admin.site.urls),
+path('',include('app1.urls')),
+]
+
+
+Step 6: Edit the settings.py for configuration in project.
+Add Application name in installed apps.
+settings.py ((program1-> Projectname)
+
+
+INSTALLED_APPS = [
+'django.contrib.admin',
+'django.contrib.auth',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
+'django.contrib.messages',
+'django.contrib.staticfiles',
+'app1',
+]
