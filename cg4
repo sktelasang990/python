@@ -37,3 +37,16 @@ translation_matrix = np.array([[1, 0, 2],
                                [0, 0, 1]])  # Translation by (2, -1)
 
 theta = np.pi / 4  # Rotation angle (45 degrees)
+﻿
+
+rotation_matrix = np.array([[np.cos(theta), -np.sin(theta), 0], [np.sin(theta), np.cos(theta), 0],
+[0, 0, 1]]) # Rotation by 45 degrees
+# Apply transformations
+objects = [square, triangle]
+transformations - [scaling_matrix, shearing_matrix] transformations = [translation_matrix, rotation_matrix] titles = ['Translation', 'Rotation']
+# Display each transformation separately
+for obj, trans, title in zip(objects, transformations, titles): draw_objects(obj, trans, title)
+#Apply transformations objects = [square, triangle]
+=
+transformations - [scaling matrix, shearing_matrix] transformations = [translation matrix, rotation_matrix] titles = ['Scaling', 'Shearing']
+for obj, trans, title in zip(objects, transformations, titles): draw_objects(obj, trans, title)
