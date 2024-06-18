@@ -1,0 +1,39 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
+
+# Function to draw objects and their transformations
+def draw_objects(obj, trans, title):
+    fig, ax = plt.subplots(1, 1, figsize=(5, 5))
+    ax.add_patch(Polygon(obj, color='blue', alpha=0.5))
+    transformed_obj = np.dot(trans, np.vstack((obj.T, np.ones(len(obj)))))
+    transformed_obj = transformed_obj[:2, :].T  # Extracting the transformed points
+    ax.add_patch(Polygon(transformed_obj, color='red', alpha=0.5))
+    ax.set_title(title)
+    ax.set_xlim(-5, 5)
+    ax.set_ylim(-5, 5)
+    ax.set_aspect('equal', 'box')
+    ax.grid(True)
+    ax.axhline(0, color='black', linewidth=0.5)
+    ax.axvline(0, color='black', linewidth=0.5)
+    ax.plot(0, 0, 'ko')  # Origin marker
+    plt.show()
+
+# Define basic objects
+square = np.array([[0, 0], [1, 0], [1, 1], [0, 1]])
+triangle = np.array([[0, 0], [1, 0], [0.5, np.sqrt(3)/2]])
+
+# Define transformation matrices
+scaling_matrix = np.array([[2, 0, 0],
+                           [0, 2, 0],
+                           [0, 0, 1]])  # Scaling by a factor of 2
+
+shearing_matrix = np.array([[1, 0.5, 0],
+                            [0.5, 1, 0],
+                            [0, 0, 1]])  # Shearing by factor of 0.5
+
+translation_matrix = np.array([[1, 0, 2],
+                               [0, 1, -1],
+                               [0, 0, 1]])  # Translation by (2, -1)
+
+theta = np.pi / 4  # Rotation angle (45 degrees)
