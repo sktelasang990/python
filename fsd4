@@ -135,6 +135,15 @@ import datetime
 from pathlib import Path
 
 
+from pathlib import Path
+
+import os
+
+
+
+'DIRS': [os.path.join(BASE_DIR, 'templates')],
+
+
 
 
  
