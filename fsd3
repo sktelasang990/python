@@ -201,6 +201,16 @@ return self.name
 
 
 
+from django.contrib import admin
+from bhu3.models import Fruit,Student
+admin.site.register(Fruit)
+admin.site.register(Student)
+
+
+
+
+
+
 
 
 Step 9: Edit the settings.py for configuration in project. 
