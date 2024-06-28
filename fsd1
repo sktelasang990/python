@@ -1,3 +1,27 @@
+pip install virtualenv
+py -m virtualenv env
+env/scripts/activate
+
+pip install django 
+django-admin startproject prog1
+cd prog1
+py manage.py startapp app1
+
+
+code .
+
+
+
+
+
+
+
+
+
+
+
+
+
 Program 1: Develop a Django app that displays current date and time in server
 Step 1: Create a project with name program1
  django-admin startproject program1
