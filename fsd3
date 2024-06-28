@@ -1,16 +1,26 @@
-Program 3: Develop a simple Django app that displays an unordered list of fruits and 
+py manage.py makemigrations
+py manage.py migrate
+py manage.py createsuperuser
 
-ordered list of selected students for an event.
+To create login credentialsin admin page 
 
-Step 1: Create a project with name programs
+Username: abc
 
-django-admin startproject programs
+Password: abc123
 
-Step2: Create an Application inside the project with name app3
 
-py manage.py startapp app3
+py manage.py runserver
 
-Step3: Edit the views.py in Application ‘app3’
+
+
+
+
+
+
+
+
+
+
 
 views.py (app3)
 
@@ -213,13 +223,19 @@ admin.site.register(Student)
 
 
 
-Step 9: Edit the settings.py for configuration in project. 
 
-Add Application name in installed apps.
 
 settings.py ((programs-> Projectname)
 
 
+
+from pathlib import Path
+
+import os
+
+
+
+'DIRS': [os.path.join(BASE_DIR, 'templates')],
 
 
 
