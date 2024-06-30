@@ -3,7 +3,7 @@
 import turtle
 import math
 
-# Function to draw a polygon
+
 def draw_polygon(vertices):
     turtle.penup()
     turtle.goto(vertices[-1])
@@ -13,22 +13,22 @@ def draw_polygon(vertices):
     turtle.goto(vertices[0])
     turtle.hideturtle()
 
-# Function to translate a polygon
+
 def translate_polygon(vertices, tx, ty):
     translated_vertices = [(vertex[0] + tx, vertex[1] + ty) for vertex in vertices]
     return translated_vertices
 
-# Function to shear a polygon
+
 def shear_polygon(vertices, shx, shy):
     sheared_vertices = [(vertex[0] + shx * vertex[1], vertex[1] + shy * vertex[0]) for vertex in vertices]
     return sheared_vertices
 
-# Function to scale a polygon
+
 def scale_polygon(vertices, sx, sy):
     scaled_vertices = [(vertex[0] * sx, vertex[1] * sy) for vertex in vertices]
     return scaled_vertices
 
-# Function to rotate a polygon
+
 def rotate_polygon(vertices, angle):
     rotated_vertices = []
     for vertex in vertices:
@@ -45,19 +45,19 @@ def main():
         x, y = map(int, input().split())
         vertices.append((x, y))
 
-    # Translation
+    
     tx, ty = map(float, input("Enter translation factors (tx, ty): ").split())
     translated_vertices = translate_polygon(vertices, tx, ty)
 
-    # Shearing
+    
     shx, shy = map(float, input("Enter shear factors (shx, shy): ").split())
     sheared_vertices = shear_polygon(vertices, shx, shy)
 
-    # Scaling
+    
     sx, sy = map(float, input("Enter scale factors (sx, sy): ").split())
     scaled_vertices = scale_polygon(vertices, sx, sy)
 
-    # Rotation
+    
     angle = float(input("Enter rotation angle (in degrees): "))
     rotated_vertices = rotate_polygon(vertices, angle)
 
@@ -76,15 +76,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#check the above code for the following inputs
-
-Enter no. of sides in polygon: 3
-Enter coordinates x, y for each vertex:
-0 100
-100 200
-200 0
-Enter translation factors (tx, ty): 50 50
-Enter shear factors (shx, shy): 0.5 0.5
-Enter scale factors (sx, sy): 1.5 1.5
-Enter rotation angle (in degrees): 45
