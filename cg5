@@ -45,23 +45,23 @@ pyramid = np.array([[0.5, 0.5, 0], [0, 1, 0], [1, 1, 0],
 scaling_matrix = np.array([[2, 0, 0, 0],
                            [0, 2, 0, 0],
                            [0, 0, 2, 0],
-                           [0, 0, 0, 1]])  # Scaling by a factor of 2
+                           [0, 0, 0, 1]])  
 
 shearing_matrix = np.array([[1, 0.5, 0, 0],
                             [0.5, 1, 0, 0],
                             [0, 0, 1, 0],
-                            [0, 0, 0, 1]])  # Shearing by a factor of 0.5
+                            [0, 0, 0, 1]]) 
 
 translation_matrix = np.array([[1, 0, 0, 2],
                                [0, 1, 0, -1],
                                [0, 0, 1, 1],
-                               [0, 0, 0, 1]])  # Translation by (2, -1, 1)
+                               [0, 0, 0, 1]])  
 
-theta = np.pi / 4  # Rotation angle (45 degrees)
+theta = np.pi / 4  
 rotation_matrix = np.array([[np.cos(theta), -np.sin(theta), 0, 0],
                             [np.sin(theta), np.cos(theta), 0, 0],
                             [0, 0, 1, 0],
-                            [0, 0, 0, 1]])  # Rotation by 45 degrees around Z axis
+                            [0, 0, 0, 1]])  
 
 
 objects = [cube, pyramid]
