@@ -1,0 +1,165 @@
+django-admin startproject student_project
+
+Step2 : Create an app named ‘projects’
+
+py manage.py startapp projects
+
+Step3: models.py(projects)
+
+
+
+
+ models.py(projects)
+
+ Here is the code with proper indentation:
+from django.db import models
+class Project(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    languages_used = models.CharField(max_length=100)
+    duration = models.CharField(max_length=50)
+    student_name = models.CharField(max_length=100)
+    # Add any other fields you need for the student
+
+    def __str__(self):
+        return self.title
+
+
+
+**************************
+
+
+admin.py(projects)
+
+from django.contrib import admin
+from .models import Project
+admin.site.register(Project)
+
+***************************
+
+forms.py (projects)
+
+from django import forms
+from .models import Project
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ['title', 'description', 'languages_used', 'duration', 'student_name']
+
+
+****************************
+
+Step6: viwes.py (projects)
+
+from django.shortcuts import render, redirect
+from .forms import ProjectForm
+
+def add_project(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('project_added')
+    else:
+        form = ProjectForm()
+    return render(request, 'projects/add_project.html', {'form': form})
+
+def project_added(request):
+    return render(request, 'projects/project_added.html')
+
+*************************
+
+Step7: add_project.html (projects/templates/projects/add_project.html)
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add Project</title>
+    </head>
+    <body>
+        <h1>Add Project</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+        </form>
+    </body>
+</html>
+
+
+*****************************
+Step 8: project_added.html (projects/templates/projects/project_added.html)
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Project Added</title>
+    </head>
+    <body>
+        <h1>Project Added Successfully</h1>
+        <a href="{% url 'add_project' %}">Add Another Project</a>
+    </body>
+</html>
+
+
+******************************
+
+Step9: urls.py (projects)
+
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('add/', views.add_project, name='add_project'),
+    path('added/', views.project_added, name='project_added'),
+]
+
+
+*******************************
+
+Step 10: urls.py (student_project)
+
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('projects/', include('projects.urls')),
+]
+
+**********************†**********
+
+Step 11: settings.py (student_project)
+from pathlib import Path
+import os
+
+**********************************
+
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'projects',
+]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        'USER': 'root',
+        'PASSWORD': 'Cse@1234',
+        'HOST': 'localhost',
+    }
+}
