@@ -1,0 +1,210 @@
+1. Create project course_reg2
+2. Create app reg2
+
+
+
+3. Models.py (reg2)
+from django.db import models
+
+class Course(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class Student(models.Model):
+    name = models.CharField(max_length=100)
+    courses = models.ManyToManyField(Course, related_name='students')
+
+    def __str__(self):
+        return self.name
+--------+-----------------++------------
+4. admin.py (reg2)
+
+from django.contrib import admin
+from .models import Course, Student
+
+admin.site.register(Course)
+admin.site.register(Student)
+---------+---------+-----------+-----------
+5. views.py (reg2)
+
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView
+from .models import Course, Student
+
+def register_student(request):
+    if request.method == 'POST':
+        student_name = request.POST.get('student_name')
+        selected_courses = request.POST.getlist('courses')
+        student = Student.objects.create(name=student_name)
+        student.courses.add(*selected_courses)
+        return redirect('reg2:course_list')
+    else:
+        courses = Course.objects.all()
+        return render(request, 'register.html', {'courses': courses})
+
+def course_list(request, course_id):
+    course = Course.objects.get(pk=course_id)
+    students = course.students.all()
+    return render(request, 'student_list.html', {'course': course, 'students': students})
+
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    return render(request, 'course_detail.html', {'course': course, 'course_id': course_id})
+
+class StudentListView(ListView):
+    model = Student
+    template_name = 'student_list.html'
+    context_object_name = 'students'
+
+class StudentDetailView(DetailView):
+    model = Student
+    template_name = 'student_detail.html'
+    context_object_name = 'student'
+--------+--------------+-----------------
+6. urls.py (reg2)
+
+from django.urls import path
+from . import views
+
+app_name = 'reg2'
+
+urlpatterns = [
+    path('register/', views.register_student, name='register_student'),
+    path('course/<int:course_id>/', views.course_list, name='course_list'),
+    path('course/detail/<int:course_id>/', views.course_detail, name='course_detail'),
+    path('students/', views.StudentListView.as_view(), name='student_list'),
+    path('student/detail/<int:pk>/', views.StudentDetailView.as_view(), name='student_detail'),
+]
+
+--------+------------+------------+------
+
+7. reg2/templates/register.html
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Student Registration</title>
+    </head>
+    <body>
+        <h1>Student Registration</h1>
+        <form method="post" action="{% url 'reg2:register_student' %}">
+            {% csrf_token %}
+            <label for="student_name">Student Name:</label>
+            <input type="text" id="student_name" name="student_name">
+            <br>
+            <label for="courses">Select Courses:</label>
+            <select id="courses" name="courses" multiple>
+                {% for course in courses %}
+                    <option value="{{ (link unavailable) }}">{{ course.name }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <button type="submit">Register</button>
+        </form>
+    </body>
+</html>
+---------+----------++----------------
+
+8. reg2/templates/course_detail.html
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Course Detail</title>
+    </head>
+    <body>
+        <h1>Course Detail</h1>
+        <p>Name: {{ course.name }}</p>
+        <p>ID: {{ (link unavailable) }}</p>
+        <!-- Add any other course details you want to display -->
+    </body>
+</html>
+-------+++-------++++------------
+9. reg2/templates/student_list.html
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Student List</title>
+    </head>
+    <body>
+        <h1>Student List</h1>
+        <ul>
+            {% for student in students %}
+                <li><a href="{% url 'reg2:student_detail' pk=(link unavailable) %}">{{ student.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
+---------+++-----------++++------------
+
+10. reg2/templates/student_detail.html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Student Detail</title>
+    </head>
+    <body>
+        <h1>Student Detail</h1>
+        <p>Name: {{ student.name }}</p>
+        <p>Courses Enrolled:</p>
+        <ul>
+            {% for course in student.courses.all %}
+                <li>{{ course.name }}</li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
+-------++++--------++++--------------------
+
+11. urls.py (course_reg2)
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('reg2.urls')),
+]
+-------+-------++---------+----------+-------
+
+12. settings.py (course_reg2)
+
+import os
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'reg2',
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+    }
+]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        'USER': 'root',
+        'PASSWORD': 'Cse@1234',
+        'HOST': 'localhost',
+    }
+}
