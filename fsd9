@@ -1,0 +1,151 @@
+nstall django django-filter django-crispy-forms reportlab
+
+2. create project program9
+
+3. create app labapp
+
+
+
+
+
+
+4. models.py (labapp)
+from django.db import models
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+
+
+
+5. admin.py (labapp)
+from django.contrib import admin
+from .models import Product
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+     list_display = ('name', 'description', 'price')
+
+
+
+     
+6. views.py (labapp)
+
+import csv
+from django.http import HttpResponse
+from django.shortcuts import render
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from .models import Product
+
+def generate_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="products.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Name', 'Description', 'Price'])
+    products = Product.objects.all()
+    for product in products:
+        writer.writerow([product.name, product.description, product.price])
+    return response
+
+def generate_pdf(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="products.pdf"'
+    products = Product.objects.all()
+    data = [['Name', 'Description', 'Price']]
+    for product in products:
+        data.append([product.name, product.description, product.price])
+    doc = SimpleDocTemplate(response, pagesize=letter)
+    table = Table(data)
+    style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Courier-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ])
+    table.setStyle(style)
+    doc.build([table])
+    return response
+
+
+7. urls.py (labapp)
+
+from django.urls import path
+from .views import generate_csv, generate_pdf
+urlpatterns = [
+    path('generate-csv/', generate_csv, name='generate_csv'),
+    path('generate-pdf/', generate_pdf, name='generate_pdf'),
+]
+
+
+8. urls.py (program9)
+from django.contrib import admin
+from django.urls import path, include
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('labapp/', include('labapp.urls')),
+]
+
+
+9. Settings.py (program9)
+import os
+
+INSTALLED_APPS = [
+
+'django.contrib.admin',
+
+'django.contrib.auth',
+
+'django.contrib.contenttypes',
+
+'django.contrib.sessions',
+
+'django.contrib.messages',
+
+'django.contrib.staticfiles',
+
+'labapp',
+
+]
+
+
+
+
+
+# Optionally, define MEDIA_URL and MEDIA_ROOT if you plan to handle file uploads
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+
+
+
+
+
+
+DATABASES = {
+
+'default': {
+
+'ENGINE': 'django.db.backends.sqlite3',
+
+'NAME': BASE_DIR / 'db.sqlite3',
+
+'USER': 'root',
+
+'PASSWORD' : 'Cse@1234',
+
+'HOST' : 'localhost',
+
+}
+
+}
+
